@@ -609,8 +609,9 @@ def diff_objects(server1, server2, object1, object2, options, object_type):
     # difference report otherwise, ignore it.
     if (object_type == "DATABASE") and (object1 != object2):
         quotes = ["'", '"', "`"]
-        db1 = object1.translate(None, "".join(quotes))
-        db2 = object2.translate(None, "".join(quotes))
+        translator = str.maketrans('', '', "".join(quotes))
+        db1 = object1.translate(translator)
+        db2 = object2.translate(translator)
         first = object1_create.replace(db1, "")[1::]
         second = object2_create.replace(db2, "")[1::]
         if first == second:
@@ -1460,7 +1461,7 @@ def check_consistency(server1, server2, table1_name, table2_name,
                 else (server2.host, server2.port, err2)
             raise UtilError("Error executing CHECKSUM TABLE on '{0}@{1}': "
                             "{2}".format(*err_data))
-        if checksum1 == checksum2:
+        if checksum1[1] == checksum2[1]:
             if reporter:
                 reporter.report_state("pass")
             return None, None  # No data diffs (in any direction)

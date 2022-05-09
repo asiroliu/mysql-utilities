@@ -88,8 +88,10 @@ class Index(object):
         self.compared = False                    # mark as compared for speed
         self.duplicate_of = None                 # saves duplicate index
         # pylint: disable=R0102
-        if index_tuple[7] > 0:
-            self.column_subparts = True          # check subparts e.g. a(20)
+        if index_tuple[7] is None:
+            self.column_subparts = False
+        elif index_tuple[7] > 0:
+            self.column_subparts = True  # check subparts e.g. a(20)
         else:
             self.column_subparts = False
 
